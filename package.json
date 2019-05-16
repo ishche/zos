@@ -1,0 +1,15 @@
+{
+  "name": "zowe-datasets-mock",
+  "version": "0.0.1",
+  "description": "Mock server for Zowe Data Sets REST API",
+  "main": "out/index.js",
+  "scripts": {
+    "start": "tsc -p ./ && node out/index.js",
+    "debug": "tsc -p ./ && node out/index.js --inspect",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "dependencies": {
+    "json-server": "^0.14.2"
+  }
+}
