@@ -54,12 +54,14 @@ export class DatasetsService {
         return { items: this.dsList(filter) };
     }
 
-    // TODO filter support
     private dsList(filter: string): Dataset[] {
         const datasets = fs.readdirSync(this.datasetsPath);
         const result = [];
         for (const dataset of datasets) {
             if (dataset.endsWith(".json")) {
+                continue;
+            }
+            if (!this.checkFilter(dataset, filter)) {
                 continue;
             }
             try {
@@ -78,5 +80,16 @@ export class DatasetsService {
             }
         }
         return result;
+    }
+
+    private checkFilter(dsName: string, filter: string): boolean {
+        if (filter === "*") {
+            return true;
+        }
+        // TODO: implement not only prefix filtering
+        if (dsName.startsWith(filter)) {
+            return true;
+        }
+        return false;
     }
 }
