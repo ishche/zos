@@ -6,23 +6,63 @@ const dsService: DatasetsService = new DatasetsService("dataset");
 const middlewares = jserver.defaults();
 server.use(middlewares);
 
+/* TOOD leter
+POST /api/v1/datasets
+Create a data set
+*/
+/* TODO
+DELETE /api/v1/datasets/{dataSetName}
+Delete a data set or member
+*/
+
+/* TODO
+GET /api/v1/datasets/{dataSetName}/content
+Get the content of a sequential data set, or PDS member
+*/
+server.get("/api/v1/datasets/:dsname/content", (req, res) => {
+    res.send(req.params.dsname);
+    console.log(req);
+});
+
+/* TODO
+PUT /api/v1/datasets/{dataSetName}/content
+Sets the content of a sequential data set, or PDS member
+*/
 server.put("/api/v1/datasets/:dsname/content", (req, res) => {
     res.send(req.params.dsname);
     console.log(req);
 });
 
+/* TODO
+GET /api/v1/datasets/username
+Get current userid
+*/
 server.get("/api/v1/datasets/username", (req, res) => {
     res.send({ username: "username" });
 });
 
+// TODO filter
+/*
+GET /api/v1/datasets/{filter}/list
+Get a list of data sets without attributes matching the filter
+*/
 server.get("/api/v1/datasets/*/list", (req, res) => {
     res.send(dsService.list());
 });
 
+// TODO filter
+/*
+GET /api/v1/datasets/{filter}
+Get a list of data sets matching the filter
+*/
 server.get("/api/v1/datasets/*", (req, res) => {
-    res.send(dsService.list());
+    res.send(dsService.listFull());
 });
 
+/* TODO
+GET /api/v1/datasets/{dataSetName}/members
+Get a list of members for a partitioned data set
+*/
 server.get("/api/v1/datasets/*/members", (req, res) => {
     res.send({ items: ["MEMBER1", "MEMBER2", "MEMBER3"] });
 });
