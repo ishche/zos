@@ -1,8 +1,8 @@
-import * as fs from "fs";
 import * as jserver from "json-server";
-import * as path from "path";
+import { DatasetsService } from "./DatasetsService";
 
 const server = jserver.create();
+const dsService: DatasetsService = new DatasetsService("dataset");
 const middlewares = jserver.defaults();
 server.use(middlewares);
 
@@ -16,13 +16,11 @@ server.get("/api/v1/datasets/username", (req, res) => {
 });
 
 server.get("/api/v1/datasets/*/list", (req, res) => {
-    const filter = req.params[0];
-    res.send(generateDatasets(filter));
+    res.send(dsService.list());
 });
 
 server.get("/api/v1/datasets/*", (req, res) => {
-    const filter = req.params[0];
-    res.send(generateDatasets(filter));
+    res.send(dsService.list());
 });
 
 server.get("/api/v1/datasets/*/members", (req, res) => {
@@ -37,31 +35,3 @@ server.listen(port, () => {
     // tslint:disable-next-line: no-console
     console.log("Zowe data-sets mock api server is running at " + port);
 });
-
-function generateDatasets(filter: string) {
-    const dataFolder = path.join("dataset");
-    if (!fs.existsSync(dataFolder)) {
-        fs.mkdirSync(dataFolder);
-    }
-
-    const datasets = fs.readdirSync(dataFolder);
-    const result = [];
-    for (const dataset of datasets) {
-        if (dataset.endsWith(".json")) {
-            continue;
-        }
-        try {
-            const metadata = JSON.parse(fs.readFileSync(path.join(dataFolder, dataset + ".json")).toString());
-            if (Object.getOwnPropertyDescriptor(metadata, "name")) {
-                // Owerride name of dataset
-                result.push({ name: dataset, ...metadata });
-            } else {
-                result.push(metadata);
-            }
-        } catch (error) {
-            // tslint:disable-next-line: no-console
-            console.error(error);
-        }
-    }
-    return { items: result };
-}
