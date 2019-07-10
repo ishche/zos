@@ -6,8 +6,13 @@ const server = jserver.create();
 const middlewares = jserver.defaults();
 server.use(middlewares);
 
+server.put("/api/v1/datasets/:dsname/content", (req, res) => {
+    res.send(req.params.dsname);
+    console.log(req);
+});
+
 server.get("/api/v1/datasets/username", (req, res) => {
-    res.send({ username: "HELOKITY" });
+    res.send({ username: "username" });
 });
 
 server.get("/api/v1/datasets/*/list", (req, res) => {
@@ -41,21 +46,22 @@ function generateDatasets(filter: string) {
 
     const datasets = fs.readdirSync(dataFolder);
     const result = [];
-    if (datasets.length > 0) {
-        for (const dataset of datasets) {
-            result.push({
-                migrated: false,
-                name: dataset,
-            });
+    for (const dataset of datasets) {
+        if (dataset.endsWith(".json")) {
+            continue;
         }
-    } else {
-        result.push({
-            migrated: false,
-            name: filter
-                .split("*")
-                .join("A")
-                .toLocaleUpperCase(),
-        });
+        try {
+            const metadata = JSON.parse(fs.readFileSync(path.join(dataFolder, dataset + ".json")).toString());
+            if (Object.getOwnPropertyDescriptor(metadata, "name")) {
+                // Owerride name of dataset
+                result.push({ name: dataset, ...metadata });
+            } else {
+                result.push(metadata);
+            }
+        } catch (error) {
+            // tslint:disable-next-line: no-console
+            console.error(error);
+        }
     }
     return { items: result };
 }
