@@ -1,13 +1,17 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "lib": ["es6", "dom"],
-	"sourceMap": true,
-	"rootDir": "src",
-        "outDir":"out",
+        "target": "es6",
+        "lib": [
+            "es6"
+        ],
+        "sourceMap": true,
+        "rootDir": "src",
+        "outDir": "out",
         "module": "commonjs",
-        "moduleResolution": "node",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
-    }
+        "moduleResolution": "node"
+    },
+    "exclude": [
+        "node_modules",
+        ".vscode-test"
+    ]
 }
