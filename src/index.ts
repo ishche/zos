@@ -13,6 +13,11 @@ server.get("/api/v1/datasets/*/list", (req, res) => {
   res.send(generateDatasets(filter));
 });
 
+server.get("/api/v1/datasets/*", (req, res) => {
+  const filter = req.params[0];
+  res.send(generateDatasets(filter));
+});
+
 server.get("/api/v1/datasets/*/members", (req, res) => {
     const dataSetName = req.params[0];
     res.send({"items": ["MEMBER1", "MEMBER2", "MEMBER3"]});
