@@ -24,9 +24,23 @@ export class DatasetsService {
         }
     }
 
-    public list(): any {
+    public listMembers(dsName: string): any {
+        const membersPath = path.join(this.datasetsPath, dsName);
+        if (!fs.existsSync(membersPath) || !fs.lstatSync(membersPath).isDirectory()) {
+            // TODO error?
+            return { items: [] };
+        }
+        const members = fs.readdirSync(membersPath);
         const result = [];
-        for (const ds of this.dsList()) {
+        for (const member of members) {
+            result.push(member);
+        }
+        return { items: result };
+    }
+
+    public list(filter: string = "*"): any {
+        const result = [];
+        for (const ds of this.dsList(filter)) {
             result.push({
                 // tslint:disable-next-line: no-string-literal
                 migrated: ds["migrated"],
@@ -36,11 +50,12 @@ export class DatasetsService {
         return { items: result };
     }
 
-    public listFull(): any {
-        return { items: this.dsList() };
+    public listFull(filter: string = "*"): any {
+        return { items: this.dsList(filter) };
     }
 
-    private dsList(): Dataset[] {
+    // TODO filter support
+    private dsList(filter: string): Dataset[] {
         const datasets = fs.readdirSync(this.datasetsPath);
         const result = [];
         for (const dataset of datasets) {

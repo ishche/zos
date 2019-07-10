@@ -1,3 +1,4 @@
+// tslint:disable: no-console
 import * as jserver from "json-server";
 import { DatasetsService } from "./DatasetsService";
 
@@ -9,10 +10,6 @@ server.use(middlewares);
 /* TOOD leter
 POST /api/v1/datasets
 Create a data set
-*/
-/* TODO
-DELETE /api/v1/datasets/{dataSetName}
-Delete a data set or member
 */
 
 /* TODO
@@ -41,30 +38,36 @@ server.get("/api/v1/datasets/username", (req, res) => {
     res.send({ username: "username" });
 });
 
-// TODO filter
+/* TODO
+DELETE /api/v1/datasets/{dataSetName}
+Delete a data set or member
+*/
+server.delete("/api/v1/datasets/:dataSetName", (req, res) => {
+    res.send("NO");
+});
+
 /*
 GET /api/v1/datasets/{filter}/list
 Get a list of data sets without attributes matching the filter
 */
-server.get("/api/v1/datasets/*/list", (req, res) => {
+server.get("/api/v1/datasets/:filter/list", (req, res) => {
     res.send(dsService.list());
 });
 
-// TODO filter
 /*
 GET /api/v1/datasets/{filter}
 Get a list of data sets matching the filter
 */
-server.get("/api/v1/datasets/*", (req, res) => {
+server.get("/api/v1/datasets/:filter", (req, res) => {
     res.send(dsService.listFull());
 });
 
-/* TODO
+/*
 GET /api/v1/datasets/{dataSetName}/members
 Get a list of members for a partitioned data set
 */
-server.get("/api/v1/datasets/*/members", (req, res) => {
-    res.send({ items: ["MEMBER1", "MEMBER2", "MEMBER3"] });
+server.get("/api/v1/datasets/:dsname/members", (req, res) => {
+    res.send(dsService.listMembers(req.params.dsname));
 });
 
 const router = jserver.router("db.json");
@@ -72,6 +75,5 @@ server.use(router);
 
 const port: number = 8443;
 server.listen(port, () => {
-    // tslint:disable-next-line: no-console
     console.log("Zowe data-sets mock api server is running at " + port);
 });
