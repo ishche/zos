@@ -54,6 +54,24 @@ export class DatasetsService {
         return { items: this.dsList(filter) };
     }
 
+    public contentRead(dsName: string): string {
+        const res = this.parseDatasetName(dsName);
+        let dataPath = path.join(this.datasetsPath, res.dataset);
+        if (res.member) {
+            dataPath = path.join(dataPath, res.member);
+        }
+        return fs.readFileSync(dataPath).toString();
+    }
+
+    public contentWrite(dsName: string, data: string) {
+        const res = this.parseDatasetName(dsName);
+        let dataPath = path.join(this.datasetsPath, res.dataset);
+        if (res.member) {
+            dataPath = path.join(dataPath, res.member);
+        }
+        fs.writeFileSync(dataPath, data);
+    }
+
     public delete(dsName: string): boolean {
         const res = this.parseDatasetName(dsName);
         try {

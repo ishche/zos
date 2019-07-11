@@ -6,6 +6,7 @@ const server = jserver.create();
 const dsService: DatasetsService = new DatasetsService("dataset");
 const middlewares = jserver.defaults();
 server.use(middlewares);
+server.use(jserver.bodyParser);
 
 /* TOOD leter
 POST /api/v1/datasets
@@ -17,8 +18,12 @@ GET /api/v1/datasets/{dataSetName}/content
 Get the content of a sequential data set, or PDS member
 */
 server.get("/api/v1/datasets/:dsname/content", (req, res) => {
-    res.send(req.params.dsname);
-    console.log(req);
+    res.send({
+        records: dsService
+            .contentRead(req.params.dsname)
+            .split("\n")
+            .join("\\n"),
+    });
 });
 
 /* TODO
@@ -26,8 +31,8 @@ PUT /api/v1/datasets/{dataSetName}/content
 Sets the content of a sequential data set, or PDS member
 */
 server.put("/api/v1/datasets/:dsname/content", (req, res) => {
-    res.send(req.params.dsname);
-    console.log(req);
+    dsService.contentWrite(req.params.dsname, req.body.records);
+    res.status(201);
 });
 
 /*
