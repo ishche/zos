@@ -30,12 +30,14 @@ server.put("/api/v1/datasets/:dsname/content", (req, res) => {
     console.log(req);
 });
 
-/* TODO
+/*
 GET /api/v1/datasets/username
 Get current userid
 */
 server.get("/api/v1/datasets/username", (req, res) => {
-    res.send({ username: "username" });
+    const authHeader: string = req.headers.authorization;
+    const creds = new Buffer(authHeader.split(" ")[1], "base64").toString();
+    res.send({ username: creds.split(":")[0] });
 });
 
 /* TODO
