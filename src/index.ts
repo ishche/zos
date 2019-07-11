@@ -40,12 +40,14 @@ server.get("/api/v1/datasets/username", (req, res) => {
     res.send({ username: creds.split(":")[0] });
 });
 
-/* TODO
+/*
 DELETE /api/v1/datasets/{dataSetName}
 Delete a data set or member
 */
-server.delete("/api/v1/datasets/:dataSetName", (req, res) => {
-    res.send("NO");
+server.delete("/api/v1/datasets/:dsName", (req, res) => {
+    dsService.delete(req.params.dsName);
+    res.status(204);
+    res.send({});
 });
 
 /*

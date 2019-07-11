@@ -54,6 +54,37 @@ export class DatasetsService {
         return { items: this.dsList(filter) };
     }
 
+    public delete(dsName: string): boolean {
+        const res = this.parseDatasetName(dsName);
+        try {
+            if (res.member) {
+                fs.unlinkSync(path.join(this.datasetsPath, res.dataset, res.member));
+                const poDir = path.join(this.datasetsPath, res.dataset);
+                if (fs.readdirSync(poDir).length === 0) {
+                    fs.rmdirSync(poDir);
+                }
+            } else {
+                fs.unlinkSync(path.join(this.datasetsPath, res.dataset + ".json"));
+                fs.unlinkSync(path.join(this.datasetsPath, res.dataset));
+            }
+        } catch (error) {
+            // tslint:disable-next-line: no-console
+            console.error(error);
+            return false;
+        }
+    }
+
+    private parseDatasetName(dsName: string): { dataset: string; member?: string } {
+        let dataset: string = dsName;
+        let member: string | undefined;
+        const endOfDatasetName = dsName.indexOf("(");
+        if (endOfDatasetName) {
+            dataset = dsName.substring(0, endOfDatasetName);
+            member = dsName.substring(endOfDatasetName + 1, dsName.length - 1);
+        }
+        return { dataset, member };
+    }
+
     private dsList(filter: string): Dataset[] {
         const datasets = fs.readdirSync(this.datasetsPath);
         const result = [];
