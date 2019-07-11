@@ -33,6 +33,7 @@ Sets the content of a sequential data set, or PDS member
 server.put("/api/v1/datasets/:dsname/content", (req, res) => {
     dsService.contentWrite(req.params.dsname, req.body.records);
     res.status(201);
+    res.send({});
 });
 
 /*
