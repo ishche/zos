@@ -13,7 +13,7 @@ POST /api/v1/datasets
 Create a data set
 */
 
-/* TODO
+/*
 GET /api/v1/datasets/{dataSetName}/content
 Get the content of a sequential data set, or PDS member
 */
@@ -26,7 +26,7 @@ server.get("/api/v1/datasets/:dsname/content", (req, res) => {
     });
 });
 
-/* TODO
+/*
 PUT /api/v1/datasets/{dataSetName}/content
 Sets the content of a sequential data set, or PDS member
 */
