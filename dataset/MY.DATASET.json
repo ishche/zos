@@ -1,4 +1,6 @@
 {
     "migrated": false,
-    "name": "MY.DATASET"
+    "name": "MY.DATASET",
+    "dataSetOrganization":"PS",
+    "allocationUnit": "CYLINDER"
 }
