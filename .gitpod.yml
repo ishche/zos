@@ -1,0 +1,6 @@
+vscode:
+  extensions:
+    - BroadcomMFD.zosexplorer@0.8.0:TgUVy55Z1EQP+4JQX5kAkA==
+tasks:
+    - init: npm ci
+      command: npm run start
